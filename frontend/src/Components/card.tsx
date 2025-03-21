@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 {/*
   Heads up! 👋
 
@@ -6,6 +8,7 @@
 }
 
 export interface CardProps {
+    personagemId: number;
     nome: string;
     imageUrl: string;
     pvTotal: number;
@@ -42,7 +45,7 @@ export function Card(props: CardProps) {
 
 
                 <div className="card-actions justify-end">
-                    <button className="btn btn-primary">Visualizar</button>
+                    <Link href={`/personagens/${props.personagemId}/detalhar/`}><button className="btn btn-primary">Visualizar</button></Link>
                 </div>
             </div>
         </article>

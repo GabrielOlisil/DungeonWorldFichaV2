@@ -12,8 +12,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 
 var app = builder.Build();
+app.ApplyPendingMigrations();
+
 
 app.MapGroup("/api").RegisterEndpoints();
 
+app.Urls.Add("http://+:8080");
 
 app.Run();

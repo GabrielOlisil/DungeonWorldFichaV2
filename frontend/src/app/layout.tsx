@@ -4,6 +4,7 @@ import { themeChange } from 'theme-change'
 
 import "./globals.css";
 import {useEffect} from "react";
+import Link from "next/link";
 
 export default function RootLayout({
   children,
@@ -27,14 +28,14 @@ export default function RootLayout({
                   <ul
                       tabIndex={0}
                       className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                      <li><a>Homepage</a></li>
-                      <li><a>Portfolio</a></li>
+                      <li><Link href="/">Homepage</Link></li>
+                      <li><Link href="/personagens">Personagens</Link></li>
                       <li><a>About</a></li>
                   </ul>
               </div>
           </div>
           <div className="navbar-center">
-              <a className="btn btn-ghost text-xl">Dungeon World Ficha</a>
+              <Link href="/" className="btn btn-ghost text-xl">Dungeon World Ficha</Link>
           </div>
           <div className="navbar-end">
               <select data-choose-theme className="select select-ghost w-fit">
