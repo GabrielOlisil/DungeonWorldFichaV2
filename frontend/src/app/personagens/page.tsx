@@ -1,10 +1,16 @@
-import {FetchPersonagemList} from "@/Models/Personagem";
+import {FetchPersonagemList} from "@/models/personagem.model";
 import Link from "next/link";
 
 export default async function PersonagemsList() {
 
     const data = await fetch('http://localhost:8080/api/personagens')
     const personagens: FetchPersonagemList = await data.json();
+
+    if(!personagens.data){
+        return (
+            <div className="m-auto mt-20 text-center text-2xl">Nenhum personagem encontrado</div>
+        );
+    }
 
 
     return (
@@ -17,7 +23,7 @@ export default async function PersonagemsList() {
 
             {personagens.data.map((person, index: number) => (
 
-                <li className="list-row items-center">
+                <li className="list-row items-center" key={index} >
                     <div className="text-4xl font-thin opacity-30 tabular-nums">{index + 1}</div>
                     <div><img alt="imagem do personagem" className="size-20 rounded-box object-cover object-top" src={person.imageUrl}/></div>
                     <div className="list-col-grow">

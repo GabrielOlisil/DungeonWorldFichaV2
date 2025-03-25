@@ -1,5 +1,5 @@
-import {Card, CardProps} from "@/Components/card";
-import {Personagem} from "@/Models/Personagem";
+import {Card, CardProps} from "@/components/card";
+import {Personagem} from "@/models/personagem.model";
 
 
 type  FeedAcompanhamentoProps = {

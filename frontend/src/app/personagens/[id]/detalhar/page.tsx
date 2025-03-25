@@ -1,4 +1,4 @@
-import {FetchPersonagem} from "@/Models/Personagem";
+import {FetchPersonagem} from "@/models/personagem.model";
 
 
 export default async function Detalhar({params}: {
