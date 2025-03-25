@@ -166,6 +166,32 @@ public static class PersonagemEndpoints
                     statusCode: StatusCodes.Status400BadRequest);
         });
     }
+
+
+    public static Task<IResult> DeletePersonagem(ApplicationDbContext db, long id)
+    {
+        return ErrorHandler.HandleErrorWithNoLogAsync(async () =>
+        {
+            var personagem = await db.Personagens
+                .Include(p => p.Habilidade)
+                .FirstOrDefaultAsync(p => p.PersonagemId == id);
+
+            if (personagem is null)
+            {
+                return TypedResults.Json(new ResponseInterface<Personagem>(false, "Personagem não encontrado.", null),
+                    statusCode: StatusCodes.Status404NotFound);
+            }
+
+            db.Personagens.Remove(personagem);
+
+            return await db.SaveChangesAsync() != 0
+                ? TypedResults.Json(
+                    new ResponseInterface<Personagem>(true, "Personagem deletado com sucesso", personagem),
+                    statusCode: StatusCodes.Status200OK)
+                : TypedResults.Json(new ResponseInterface<Personagem>(false, "Personagem não deletado.", null),
+                    statusCode: StatusCodes.Status400BadRequest);
+        });
+    }
     
     static Personagem? FindByIdStrict(ApplicationDbContext db, long id)
     {

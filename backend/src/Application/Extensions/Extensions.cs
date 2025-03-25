@@ -12,6 +12,7 @@ public static class Extensions
         group.MapGet("/personagens/{id:long}", PersonagemEndpoints.PersonagemById);
         group.MapPost("/personagens/", PersonagemEndpoints.CreatePersonagem);
         group.MapPatch("/personagens/{id:long}", PersonagemEndpoints.AtualizarPersonagem);
+        group.MapDelete("/personagens/{id:long}", PersonagemEndpoints.DeletePersonagem);
 
     }
     
