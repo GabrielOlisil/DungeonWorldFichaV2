@@ -1,29 +1,52 @@
+"use client"
 import Image from "next/image";
 
 
-import {Card, CardProps} from "@/components/card";
 import FeedAcompanhamento from "@/components/feedAcompanhamento";
-import {FetchPersonagemList} from "@/models/personagem.model";
+import { FetchPersonagemList, Personagem } from "@/models/personagem.model";
+import React, { useEffect, useState } from "react";
 
 
 
-export const dynamic = 'force-dynamic'
 
-export default async function Home() {
 
-  const data = await fetch('http://localhost:8080/api/personagens')
-  const personagens: FetchPersonagemList = await data.json();
 
-  if(!personagens.data){
+export default function Home() {
 
-    return (
-        <div className="m-auto mt-20 text-center text-2xl">Nenhum personagem encontrado</div>
-    );
+  const [load, setLoading] = useState(true)
 
-  }
+  const [personagemList, setPersonagemList] = useState(null);
+
+
+
+
+
+
+  useEffect(() => {
+    fetch('http://localhost:8080/api/personagens').then(response => {
+      return response.json()
+    }).then(data => {
+       setPersonagemList(data.data)
+       setLoading(false)
+    }).catch(e => {
+      
+    });
+
+
+  }, [])
+
+
+
+
 
   return (
+    <>
 
-      <FeedAcompanhamento props={personagens.data} />
+    {load && <FeedAcompanhamento props={null} />}
+    
+    {personagemList && <FeedAcompanhamento props={personagemList} />}
+
+    </>
+
   );
 }

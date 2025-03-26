@@ -16,7 +16,7 @@ export default async function PersonagemsList() {
     return (
 
 
-        <ul className="list bg-base-100 rounded-box shadow-md w-200 m-auto mt-20">
+        <ul className="list bg-base-100 rounded-box shadow-md lg:w-200 m-auto mt-20">
 
             <li className="p-4 pb-2 text-sm opacity-60 tracking-wide">Personagens</li>
 
@@ -24,14 +24,14 @@ export default async function PersonagemsList() {
             {personagens.data.map((person, index: number) => (
 
                 <li className="list-row items-center" key={index} >
-                    <div className="text-4xl font-thin opacity-30 tabular-nums">{index + 1}</div>
-                    <div><img alt="imagem do personagem" className="size-20 rounded-box object-cover object-top" src={person.imageUrl}/></div>
+                    <div className=" text-lg sm:text-4xl font-thin opacity-30 tabular-nums">{index + 1}</div>
+                    <div className=""><img alt="imagem do personagem" className="size-20 rounded-box object-cover object-top hidden sm:block" src={person.imageUrl}/></div>
                     <div className="list-col-grow">
-                        <div className="text-xl" >{person.nome}</div>
-                        <div className="text-lg uppercase font-semibold opacity-60">{person.classe}</div>
+                        <div className="text-base sm:text-xl" >{person.nome}</div>
+                        <div className="text-base  sm:text-lg uppercase font-semibold opacity-60">{person.classe}</div>
                     </div>
 
-                        <Link href={`/personagens/${person.personagemId}/detalhar`} className="btn btn-primary" >Detalhar</Link>
+                        <Link href={`/personagens/${person.personagemId}/detalhar`} className="btn btn-primary text-xs sm:text-base" >Detalhar</Link>
 
                 </li>
             ))}

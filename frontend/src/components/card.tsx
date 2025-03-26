@@ -1,3 +1,5 @@
+"use-client"
+
 import Link from "next/link";
 
 {/*
@@ -5,6 +7,10 @@ import Link from "next/link";
 
   This component comes with some `rtl` classes. Please remove them if they are not needed in your project.
 */
+}
+
+interface Props {
+    props: CardProps | null
 }
 
 export interface CardProps {
@@ -16,10 +22,42 @@ export interface CardProps {
     classe: string;
 }
 
-export function Card(props: CardProps) {
+export function Card({ props }: Props) {
+
+    if (!props) {
+        return (
+            <article className="card bg-base-100 w-96  shadow-xl">
+
+                <div className="skeleton h-56 w-full"></div>
+
+
+
+                <div className="card-body">
+
+                    <h2 className="card-title">
+                        <div className="skeleton h-4 w-8/12"></div>
+
+                    </h2>
+
+
+
+                        <div className="skeleton h-4 w-4/12"></div>
+                  
+                        <div className="skeleton h-4 w-2/12"></div>
+                    
+
+
+                    <div className="card-actions justify-end">
+                        <button className="btn btn-primary">Visualizar</button>
+                    </div>
+                </div>
+            </article>
+        )
+    }
+
     return (
 
-        <article className="card bg-base-100 w-96 shadow-xl ">
+        <article className="card bg-base-100 w-96  shadow-xl">
 
             <figure>
                 <img
