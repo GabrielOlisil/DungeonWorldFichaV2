@@ -23,7 +23,7 @@ export default function BarraHabilidades() {
                     </label>
                 </div>
 
-                <div className="flex flex-col-reverse  items-stretch sm:flex-row sm:p-10">
+                <div className="flex flex-col-reverse  items-stretch sm:flex-row ">
                     <div className="relative w-50 flex-1 self-center">
                         <img src="http://localhost:3000/shield.png" className="w-full" alt="" />
                         {/* Centralizar o conteúdo sobre a imagem */}

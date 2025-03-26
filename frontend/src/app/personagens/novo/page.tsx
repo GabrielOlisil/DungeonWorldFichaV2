@@ -36,7 +36,7 @@ export default function CriarPersonagem() {
         let body = JSON.stringify(personagem);
 
         try {
-            var response = await fetch("http://localhost:080/api/personagens", {
+            var response = await fetch("http://localhost:8000/api/personagens", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

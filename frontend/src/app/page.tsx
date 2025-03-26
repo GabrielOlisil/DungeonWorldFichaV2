@@ -3,8 +3,8 @@ import Image from "next/image";
 
 
 import FeedAcompanhamento from "@/components/feedAcompanhamento";
-import { FetchPersonagemList, Personagem } from "@/models/personagem.model";
 import React, { useEffect, useState } from "react";
+import { useKeycloak } from "@react-keycloak/web";
 
 
 
@@ -20,16 +20,14 @@ export default function Home() {
 
 
 
-
-
   useEffect(() => {
-    fetch('http://localhost:8080/api/personagens').then(response => {
+    fetch('http://localhost:8000/api/personagens').then(response => {
       return response.json()
     }).then(data => {
-       setPersonagemList(data.data)
-       setLoading(false)
+      setPersonagemList(data.data)
+      setLoading(false)
     }).catch(e => {
-      
+
     });
 
 
@@ -42,9 +40,9 @@ export default function Home() {
   return (
     <>
 
-    {load && <FeedAcompanhamento props={null} />}
-    
-    {personagemList && <FeedAcompanhamento props={personagemList} />}
+      {load && <FeedAcompanhamento props={null} />}
+
+      {personagemList && <FeedAcompanhamento props={personagemList} />}
 
     </>
 

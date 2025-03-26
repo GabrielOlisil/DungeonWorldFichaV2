@@ -1,31 +1,4 @@
 services:
-  backend:
-    build: 
-      context: backend/
-      dockerfile: Dockerfile.development  # Ajuste o nome ou caminho, se necessário
-
-    restart: on-failure
-    volumes:
-      - ./backend/src:/App
-    ports:
-      - "8000:8080"
-    environment:
-      - ASPNETCORE_URLS=http://+:8080
-      - ASPNETCORE_HTTP_PORTS=
-      - ASPNETCORE_ENVIRONMENT=Development
-    depends_on:
-      - db
-    command: tail -f /dev/null
-   
-  db:
-    image: mariadb:11.7-noble
-    volumes:
-      - db_data:/var/lib/mysql
-    restart: always
-    environment:
-      MARIADB_ROOT_PASSWORD: my-secret-pw
-      MYSQL_DATABASE: dungeon_world_v2
-
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
@@ -60,7 +33,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
-      
+
 volumes:
-  db_data:
   postgres_data:
