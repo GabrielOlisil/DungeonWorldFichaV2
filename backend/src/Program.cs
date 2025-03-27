@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost3000", policy =>
@@ -16,6 +17,12 @@ builder.Services.AddCors(options =>
             .AllowCredentials(); 
     });
 });
+
+builder.Services.AddHttpClient("keycloak", builder =>
+{
+    builder.BaseAddress = new Uri("http://keycloak:8080");
+    builder.DefaultRequestHeaders.Add("User-Agent", "dotnet");
+}).AddAsKeyed();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
