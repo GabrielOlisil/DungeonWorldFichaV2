@@ -41,14 +41,14 @@ export function Card({ props }: Props) {
 
 
 
-                        <div className="skeleton h-4 w-4/12"></div>
-                  
-                        <div className="skeleton h-4 w-2/12"></div>
-                    
+                    <div className="skeleton h-4 w-4/12"></div>
+
+                    <div className="skeleton h-4 w-2/12"></div>
+
 
 
                     <div className="card-actions justify-end">
-                        <button className="btn btn-primary">Visualizar</button>
+                        <div className="skeleton h-10 w-24"></div>
                     </div>
                 </div>
             </article>

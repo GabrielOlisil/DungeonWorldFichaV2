@@ -1,14 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
-import _Home from "./pages/_Home";
-import App from "./pages/App";
-import HomeLayout from "./pages/_Home";
+import _Home from "./pages/Layout";
+import Home from "./pages/Home";
+import HomeLayout from "./pages/Layout";
+import Novo from "./pages/personagens/novo";
 
 export default createBrowserRouter([
     {
         path: "/",
         Component: HomeLayout,
         children: [
-            { path: "/", Component: App }
+            { path: "/", Component: Home },
+            { path: "/personagens/novo", Component: Novo }
         ]
     }
 ])

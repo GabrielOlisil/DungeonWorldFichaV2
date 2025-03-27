@@ -46,7 +46,7 @@ public class AuthEndpoints
         
         using var content = new FormUrlEncodedContent([
             new KeyValuePair<string, string>("client_id", "dungeon_client"),
-            new KeyValuePair<string, string>("client_secret", "ZNtl4J7vXGlW0hczQ83IvprYc8Bnu5I5"), //alterar depois
+            new KeyValuePair<string, string>("client_secret", "ayat863c7loo42t4DemJOm8LPXox8Inv"), //alterar depois
             new KeyValuePair<string, string>("scope", "openid"),
             new KeyValuePair<string, string>("grant_type", "password"),
             new KeyValuePair<string, string>("username", loginRequest.Username),
