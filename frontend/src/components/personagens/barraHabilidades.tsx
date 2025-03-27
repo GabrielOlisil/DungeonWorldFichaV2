@@ -1,4 +1,4 @@
-import { PersonagemContext } from "@/app/personagens/[id]/detalhar/page"
+import { PersonagemContext } from "@/app/(home)/personagens/[id]/detalhar/page"
 import { useContext } from "react"
 
 
@@ -27,8 +27,8 @@ export default function BarraHabilidades() {
                     <div className="relative w-50 flex-1 self-center">
                         <img src="http://localhost:3000/shield.png" className="w-full" alt="" />
                         {/* Centralizar o conteúdo sobre a imagem */}
-                        <div className="absolute inset-0 flex justify-center items-center text-4xl font-bold">
-                            2
+                        <div className="absolute inset-0 flex justify-center items-center text-4xl font-bold text-base-content">
+                            {context?.armadura}
                         </div>
                     </div>
                     <div className="flex-1 flex flex-col items-center justify-center">
@@ -38,13 +38,13 @@ export default function BarraHabilidades() {
                                 clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
                             }}
                         >
-                            <div className="absolute inset-0 flex items-center justify-center ">
+                            <div className="absolute inset-0 flex items-center justify-center text-success-content">
                                 {context?.dadoDano}
                             </div>
                         </div>
                         <div className="relative h-10 w-full bg-error/40">
                             <div className="absolute left-0 bottom-0 top-0 bg-error " style={{ right: `${(100 - (context!.pv / context!.pvTotal) * 100)}%` }}></div>
-                            <div className="absolute inset-0 flex justify-center items-center">
+                            <div className="absolute inset-0 flex justify-center items-center text-error-content">
                                 {context?.pv}/{context?.pvTotal}
                             </div>
                         </div>
@@ -182,7 +182,7 @@ export default function BarraHabilidades() {
                 </div>
 
 
-               
+
             </div>
 
         </div>

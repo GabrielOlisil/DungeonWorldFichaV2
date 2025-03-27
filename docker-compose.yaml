@@ -27,8 +27,10 @@ services:
       MYSQL_DATABASE: dungeon_world_v2
 
   keycloak:
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:26.1.4
     container_name: keycloak
+    volumes:
+      - ./kc_config:/opt/keycloak/export
     environment:
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin  #
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin  #
@@ -51,7 +53,7 @@ services:
     restart: unless-stopped
 
   postgres:
-    image: postgres:alpine
+    image: postgres:17.4-alpine3.21
     container_name: postgres
     environment:
       - POSTGRES_USER=keycloak
