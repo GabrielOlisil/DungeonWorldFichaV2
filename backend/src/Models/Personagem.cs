@@ -34,12 +34,25 @@ public record Personagem
     public override string ToString()
     {
         return $"""
-                Id = {PersonagemId.ToString()}
-                Nome = {Nome ?? ""}
-                Pv = {Pv.ToString()}
-                Armadura = {Armadura.ToString()}
-                DadoDano = {DadoDano.ToString()}
-                Nivel = {Nivel.ToString()}
+                Id = {PersonagemId}
+                Nome = {Nome ?? "N/A"}
+                Pv = {Pv}
+                PvTotal = {PvTotal}
+                Armadura = {Armadura}
+                DadoDano = {DadoDano}
+                Nivel = {Nivel}
+                Classe = {Classe ?? "N/A"}
+                DescricaoUm = {DescricaoUm ?? "N/A"}
+                Equipamento = {Equipamento ?? "N/A"}
+                DescricaoDois = {DescricaoDois ?? "N/A"}
+                ImageUrl = {ImageUrl ?? "N/A"}
+                Habilidade: 
+                    Forca = {Habilidade?.Forca ?? 0}
+                    Destreza = {Habilidade?.Destreza ?? 0}
+                    Constituicao = {Habilidade?.Constituicao ?? 0}
+                    Inteligencia = {Habilidade?.Inteligencia ?? 0}
+                    Sabedoria = {Habilidade?.Sabedoria ?? 0}
+                    Carisma = {Habilidade?.Carisma ?? 0}
                 """;
     }
 }

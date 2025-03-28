@@ -19,8 +19,10 @@ public static class ErrorHandler
                 statusCode: StatusCodes.Status400BadRequest
             );
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Console.WriteLine(ex);
+            
             return TypedResults.Json(
                 new ResponseInterface<string>(false, $"Erro interno", null),
                 statusCode: StatusCodes.Status500InternalServerError

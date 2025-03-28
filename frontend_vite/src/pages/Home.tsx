@@ -23,9 +23,7 @@ export default function Home() {
 
     return (
         <>
-            <PersonagensContext.Provider value={personagens}>
-                <FeedAcompanhamento />
-            </PersonagensContext.Provider>
+            <FeedAcompanhamento props={personagens} />
         </>
 
     )

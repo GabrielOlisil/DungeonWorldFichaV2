@@ -1,5 +1,6 @@
 using backend.Application.Endpoints;
 using backend.Domain.Databases;
+using backend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -12,10 +13,9 @@ public static class Extensions
         group.MapGet("/personagens",   PersonagemEndpoints.PersonagemList);
         group.MapGet("/personagens/{id:long}", PersonagemEndpoints.PersonagemById);
         group.MapPost("/personagens/", PersonagemEndpoints.CreatePersonagem);
-        group.MapPatch("/personagens/{id:long}", PersonagemEndpoints.AtualizarPersonagem);
+        group.MapPatch("/personagens/{id:long}", PersonagemEndpoints.AtualizarPersonagemPartial);
         group.MapDelete("/personagens/{id:long}", PersonagemEndpoints.DeletePersonagem);
-        
-        group.MapPost("/auth", AuthEndpoints.Login);
+        group.MapPut("/personagens/{id:long}", PersonagemEndpoints.AtualizarPersonagem);
     }
     
     public static void ApplyPendingMigrations(this IApplicationBuilder app)

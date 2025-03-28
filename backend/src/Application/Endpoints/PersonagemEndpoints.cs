@@ -61,6 +61,70 @@ public static class PersonagemEndpoints
 
 
     public static Task<IResult> AtualizarPersonagem(ApplicationDbContext db, long id, Personagem personagem)
+{
+    return ErrorHandler.HandleErrorWithNoLogAsync(async () =>
+    {
+        // Verificando se o personagem é nulo
+        if (personagem == null)
+        {
+            return TypedResults.Json(new ResponseInterface<Personagem>(false, "Personagem fornecido é inválido.", null),
+                statusCode: StatusCodes.Status400BadRequest);
+        }
+
+
+        var oldPersonagem = await db.Personagens.Include(p => p.Habilidade).FirstOrDefaultAsync(p => p.PersonagemId == id);
+        
+        Console.WriteLine(oldPersonagem);
+
+
+        if (oldPersonagem == null)
+        {
+            return TypedResults.Json(new ResponseInterface<Personagem>(false, "Personagem não existe.", null),
+                statusCode: StatusCodes.Status400BadRequest);
+        }
+
+        // Verificando se a habilidade é nula
+        if (personagem.Habilidade == null)
+        {
+            return TypedResults.Json(new ResponseInterface<Personagem>(false, "Habilidade do personagem não fornecida.", null),
+                statusCode: StatusCodes.Status400BadRequest);
+        }
+
+        // Atualizando os campos do personagem
+        oldPersonagem.Armadura = personagem.Armadura;
+        oldPersonagem.Classe = personagem.Classe;
+        oldPersonagem.Equipamento = personagem.Equipamento;
+        oldPersonagem.Nivel = personagem.Nivel;
+        oldPersonagem.Nome = personagem.Nome;
+        oldPersonagem.Pv = personagem.Pv;
+        oldPersonagem.PvTotal = personagem.PvTotal;
+        oldPersonagem.DadoDano = personagem.DadoDano;
+        oldPersonagem.DescricaoDois = personagem.DescricaoDois;
+        oldPersonagem.DescricaoUm = personagem.DescricaoUm;
+        oldPersonagem.ImageUrl = personagem.ImageUrl;
+        oldPersonagem.Habilidade.Forca = personagem.Habilidade.Forca;
+        oldPersonagem.Habilidade.Inteligencia = personagem.Habilidade.Inteligencia;
+        oldPersonagem.Habilidade.Sabedoria = personagem.Habilidade.Sabedoria;
+        oldPersonagem.Habilidade.Destreza = personagem.Habilidade.Destreza;
+        oldPersonagem.Habilidade.Constituicao = personagem.Habilidade.Constituicao;
+        oldPersonagem.Habilidade.Carisma = personagem.Habilidade.Carisma;
+
+        Console.WriteLine("chegou");
+
+        db.Personagens.Update(oldPersonagem);
+
+        // Verificando se as alterações foram salvas
+        return await db.SaveChangesAsync() != 0
+            ? TypedResults.Json(
+                new ResponseInterface<Personagem>(true, "Personagem Atualizado com sucesso", FindByIdStrict(db, id)),
+                statusCode: StatusCodes.Status200OK)
+            : TypedResults.Json(new ResponseInterface<Personagem>(false, "Personagem não atualizado.", null),
+                statusCode: StatusCodes.Status400BadRequest);
+    });
+}
+
+
+    public static Task<IResult> AtualizarPersonagemPartial(ApplicationDbContext db, long id, Personagem personagem)
     {
         return ErrorHandler.HandleErrorWithNoLogAsync(async () =>
         {

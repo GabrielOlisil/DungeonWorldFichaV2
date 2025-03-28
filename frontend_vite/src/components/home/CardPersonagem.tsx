@@ -54,7 +54,7 @@ export default ({ props }: CardProps) => {
 
                         {
                             props
-                                ? <Link to={`/personagens/${props.personagemId}/detalhar/`}><button className="btn btn-primary">Visualizar</button></Link>
+                                ? <Link to={`/personagens/${props.personagemId}`}><button className="btn btn-primary">Visualizar</button></Link>
                                 : <div className="skeleton h-10 w-24"></div>
 
                         }

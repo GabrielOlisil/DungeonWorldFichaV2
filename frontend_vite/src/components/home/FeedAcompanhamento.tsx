@@ -1,12 +1,10 @@
-
-import { useContext } from "react"
-import { PersonagensContext } from "~/pages/Home"
 import CardPersonagem from "./CardPersonagem"
+import { Personagem } from "~/models/personagem.model"
 
 
-export default () => {
+export default ({ props }: { props: Personagem[] | undefined }) => {
 
-    let personagens = useContext(PersonagensContext)
+    let personagens = props
 
     if (!personagens || personagens.length == 0) {
         return (
