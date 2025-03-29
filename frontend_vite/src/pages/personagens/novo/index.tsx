@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Notificacao, { notificacoes } from "~/components/home/personagens/notificacao";
 import { FetchPersonagem, Personagem } from "~/models/personagem.model";
 
-export default () => {
+export default function NovoPersonagem() {
 
     const [notificacoes] = React.useState<notificacoes[]>([]);
 
@@ -19,7 +19,7 @@ export default () => {
 
     const onSubmit: SubmitHandler<Personagem> = async (data) => {
 
-        let personagem: Personagem = { ...data };
+        const personagem: Personagem = { ...data };
 
 
         personagem.pv = personagem.pvTotal;
@@ -28,10 +28,10 @@ export default () => {
         personagem.equipamento = ""
         personagem.nivel = 1;
 
-        let body = JSON.stringify(personagem);
+        const body = JSON.stringify(personagem);
 
         try {
-            var response = await fetch("http://localhost:800/api/personagens", {
+            const response = await fetch("http://localhost:800/api/personagens", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -39,7 +39,7 @@ export default () => {
                 body
             });
 
-            let personagem: FetchPersonagem = await response.json();
+            const personagem: FetchPersonagem = await response.json();
 
             if (response.ok) {
                 router(`/personagens/${personagem.data.personagemId}/detalhar`)

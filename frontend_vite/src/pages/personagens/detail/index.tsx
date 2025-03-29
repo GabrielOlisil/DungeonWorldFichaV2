@@ -22,7 +22,7 @@ export default function DetailPersonagem() {
             } else {
                 setPersonagem(result.data);
             }
-        } catch (err) {
+        } catch {
             setError('Erro ao carregar os dados.');
         } finally {
             setLoading(false);
@@ -49,7 +49,11 @@ export default function DetailPersonagem() {
     }
 
     return (
-        <BarraHabilidades props={personagem} />
+
+        <section className="pt-3">
+
+            <BarraHabilidades props={personagem} />
+        </section>
     )
 
 }

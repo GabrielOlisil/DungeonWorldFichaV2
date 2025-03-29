@@ -2,9 +2,9 @@ import CardPersonagem from "./CardPersonagem"
 import { Personagem } from "~/models/personagem.model"
 
 
-export default ({ props }: { props: Personagem[] | undefined }) => {
+const FeedAcompanhamento = ({ props }: { props: Personagem[] | undefined }) => {
 
-    let personagens = props
+    const personagens = props
 
     if (!personagens || personagens.length == 0) {
         return (
@@ -35,4 +35,4 @@ export default ({ props }: { props: Personagem[] | undefined }) => {
 }
 
 
-// export default FeedAcompanhamento;
+export default FeedAcompanhamento;

@@ -5,13 +5,12 @@ import Navbar from "~/components/home/Navbar"
 function HomeLayout() {
 
   return (
-    <>
-      <Navbar />
-      <article className="mb-20 min-h-screen">
 
-        <Outlet />
-      </article>
-    </>
+    <article className="min-h-screen bg-base-200">
+      <Navbar />
+      <Outlet />
+    </article>
+
   )
 }
 

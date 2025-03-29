@@ -1,85 +1,114 @@
 
 import shield from "~/assets/shield.png"
 import { FetchPersonagem, Personagem } from "~/models/personagem.model"
-import { useNavigate } from "react-router-dom";
-import { set, SubmitHandler } from "react-hook-form";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+
 
 
 
 const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
-    const router = useNavigate()
-
-
-    if (!props) {
-        return <div>Personagem não encontrado</div>
-    }
-
-    const [personagem, setPersonagem] = useState<Personagem>(props)
-
-    const handleChange = (e: any) => {
-        const person = personagem;
-        person.equipamento = e.target.value
-        setPersonagem(person)
-    }
-
-
-    const handleBlur = async () => {
+    const [personagemLocal, setPersonagemLocal] = useState<Personagem | undefined>(props);
+    const { register, watch, reset } = useForm<Personagem>();
 
 
 
 
-        let body = JSON.stringify(personagem);
+    useEffect(() => {
+        if (props) {
+            setPersonagemLocal(props)
+            reset(props);
+        }
+    }, [props, reset]);
+
+    const handleBlur = async (field: keyof Personagem, nestedField?: keyof Personagem["habilidade"]) => {
+        const currentValue = nestedField
+            ? watch(`habilidade.${nestedField}`)
+            : watch(field);
+
+        const initialValue = nestedField
+            ? personagemLocal?.habilidade?.[nestedField]
+            : personagemLocal?.[field];
+
+        if (currentValue === initialValue) return; // Evita requisições desnecessárias
 
         try {
-            var response = await fetch(`http://localhost:8000/api/personagens/${personagem.personagemId}`, {
+            const body = {
+                ...personagemLocal,
+                [field]: nestedField
+                    ? { ...personagemLocal?.habilidade, [nestedField]: currentValue }
+                    : currentValue,
+            };
+
+            setPersonagemLocal(body as Personagem);
+
+
+            const response = await fetch(`http://localhost:8000/api/personagens/${props?.personagemId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body
+                body: JSON.stringify(body),
             });
 
-            let reqPersonagem: FetchPersonagem = await response.json();
+            const reqPersonagem: FetchPersonagem = await response.json();
 
-            if (response.ok && reqPersonagem.data) {
-                setPersonagem(reqPersonagem.data)
-                return
+            if (!response.ok || !reqPersonagem.data) {
+                throw new Error("Erro ao atualizar personagem");
             }
+            reset(reqPersonagem.data);
 
-            throw new Error("Erro ao Atualizar personagem");
+        } catch (e: unknown) {
 
-        } catch (e: any) {
-            console.log(e.message)
+            if (e instanceof Error) {
+                console.error(e.message);
+            } else {
+                console.error("Erro desconhecido");
+            }
         }
+    };
 
-
+    if (!props) {
+        return <div>Personagem não encontrado</div>;
     }
-
-
-
-
 
     return (
         <div className="flex p-2 flex-col md:flex-row gap-4 justify-start items-stretch">
 
 
             <div className="card sm:w-96 w-full self-center md:self-start bg-base-100 shadow-sm p-3">
+
+
+
                 {
-                    personagem?.imageUrl
+                    props?.imageUrl
                         ? <img
-                            src={personagem?.imageUrl}
+
+                            src={personagemLocal?.imageUrl}
                             className="h-60 object-cover object-top"
                             alt="Shoes" />
                         : <div className="skeleton h-60 oject-cover"></div>
-
                 }
+
+                <button className="btn mt-2 btn-primary" onClick={() => (document.getElementById('my_modal_2') as HTMLDialogElement).showModal()}>Alterar Imagem</button>
+                <dialog id="my_modal_2" className="modal modal-bottom sm:modal-middle">
+                    <div className="modal-box">
+                        <h3 className="font-bold text-lg">Alterando imagem</h3>
+                        <input className="input w-full mt-5" type="text" {...register("imageUrl")} onBlur={() => handleBlur("imageUrl")} placeholder="Uma imagem bonita" />
+                        <div className="modal-action">
+                            <form method="dialog">
+                                {/* if there is a button in form, it will close the modal */}
+                                <button className="btn">Close</button>
+                            </form>
+                        </div>
+                    </div>
+                </dialog>
 
 
                 <div className="pt-3">
                     <label className="input w-full">
                         Nível
-                        <input type="text" defaultValue={personagem?.nivel} className="" />
+                        <input {...register("nivel")} onBlur={() => handleBlur("nivel")} type="text" className="" />
                     </label>
                 </div>
 
@@ -88,26 +117,46 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
                         <img src={shield} className="w-full" alt="" />
                         {/* Centralizar o conteúdo sobre a imagem */}
                         <div className="absolute inset-0 flex justify-center items-center text-4xl font-bold text-base-content">
-                            {personagem.armadura}
+                            <input type="text" className="input input-ghost w-7 text-center p-0 focus-within:outline-none"
+                                {...register("armadura")} onBlur={() => handleBlur("armadura")}
+
+                            />
                         </div>
                     </div>
                     <div className="flex-1 flex flex-col items-center justify-center mt-2">
                         <div
-                            className="hexagon w-15 h-15 bg-success relative mb-4"
-                            style={{
-                                clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-                            }}
+                            className="mask mask-hexagon w-15 h-15 bg-success relative mb-4"
+
                         >
-                            <div className="absolute inset-0 flex items-center justify-center text-success-content">
-                                {personagem.dadoDano}
+                            <div className="absolute inset-0 flex items-center justify-center text-success-content cursor-pointer">
+                                {props.dadoDano}
                             </div>
                         </div>
-                        <div className="relative h-10 w-full bg-error/40">
+                        <div className="relative h-10 w-full bg-error/40 rounded">
 
-                            {
-                                personagem.pv && <> <div className="absolute left-0 bottom-0 top-0 bg-error " style={{ right: `${(100 - (personagem.pv / personagem.pvTotal) * 100)}%` }}></div>
+                            {personagemLocal?.pv &&
+                                <>
+                                    <div className="absolute left-0 bottom-0 top-0 bg-error rounded  "
+                                        style=
+                                        {
+                                            { right: `${Math.max((100 - (personagemLocal.pv / personagemLocal.pvTotal) * 100), 0)}%`, transition: "right 0.5s ease" }
+                                        }></div>
+
+
                                     <div className="absolute inset-0 flex justify-center items-center text-error-content">
-                                        {personagem?.pv}/{personagem?.pvTotal}
+
+                                        <input type="text" className="input input-ghost w-7 text-center p-0 focus-within:outline-none focus-within:bg-transparent overflow-hidden"
+                                            {...register("pv")} onBlur={() => handleBlur("pv")}
+
+                                        />
+
+                                        /
+
+                                        <input type="text" className="input input-ghost w-7 text-center p-0 focus-within:outline-none focus-within:bg-transparent"
+                                            {...register("pvTotal")} onBlur={() => handleBlur("pvTotal")}
+
+                                        />
+
                                     </div></>
                             }
 
@@ -129,7 +178,7 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
                                 type="number"
                                 placeholder={`Ex: 16`}
 
-                                defaultValue={personagem.habilidade.forca}
+                                {...register("habilidade.forca")} onBlur={() => handleBlur("habilidade", "forca")}
                                 className="input "
                             />
 
@@ -143,8 +192,7 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
                             <input
                                 type="number"
                                 placeholder={`Ex: 16`}
-
-                                defaultValue={personagem.habilidade.inteligencia}
+                                {...register("habilidade.inteligencia")} onBlur={() => handleBlur("habilidade", "inteligencia")}
                                 className="input "
                             />
 
@@ -158,8 +206,7 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
                             <input
                                 type="number"
                                 placeholder={`Ex: 16`}
-
-                                defaultValue={personagem.habilidade.carisma}
+                                {...register("habilidade.carisma")} onBlur={() => handleBlur("habilidade", "carisma")}
                                 className="input "
                             />
 
@@ -175,8 +222,7 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
                             <input
                                 type="number"
                                 placeholder={`Ex: 16`}
-
-                                defaultValue={personagem.habilidade.constituicao}
+                                {...register("habilidade.constituicao")} onBlur={() => handleBlur("habilidade", "constituicao")}
                                 className="input "
                             />
 
@@ -190,8 +236,7 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
                             <input
                                 type="number"
                                 placeholder={`Ex: 16`}
-
-                                defaultValue={personagem?.habilidade.sabedoria}
+                                {...register("habilidade.sabedoria")} onBlur={() => handleBlur("habilidade", "sabedoria")}
                                 className="input "
                             />
 
@@ -205,8 +250,7 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
                             <input
                                 type="number"
                                 placeholder={`Ex: 16`}
-
-                                defaultValue={personagem?.habilidade.destreza}
+                                {...register("habilidade.destreza")} onBlur={() => handleBlur("habilidade", "destreza")}
                                 className="input "
                             />
 
@@ -227,8 +271,8 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
                     </label>
                     <input
                         type="text"
-                        defaultValue={personagem?.nome}
-                        className="input input-ghost border-b-base-content focus-within:border-b-base-content rounded-none w-full focus-within:outline-none "
+                        {...register("nome")} onBlur={() => handleBlur("nome")}
+                        className="input  w-full  "
                     />
                 </div>
 
@@ -240,15 +284,15 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
                     </label>
                     <input
                         type="text"
-                        defaultValue={personagem?.classe}
-                        className="input input-ghost border-b-base-content focus-within:border-b-base-content rounded-none w-full focus-within:outline-none "
+                        {...register("classe")} onBlur={() => handleBlur("classe")}
+                        className="input w-full "
                     />
                 </div>
 
                 <label className="label ">
                     <span className="label-text">Equipamento</span>
                 </label>
-                <textarea onBlur={handleBlur} onChange={handleChange} className="textarea grow w-full" placeholder="Bio" defaultValue={personagem?.equipamento}></textarea>
+                <textarea {...register("equipamento")} onBlur={() => handleBlur("equipamento")} className="textarea grow w-full" placeholder="Equipamento" ></textarea>
 
 
 
@@ -261,11 +305,12 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
                 <div className="flex flex-col 2xl:flex-row grow gap-2">
                     <div className="grow flex-col flex">
 
-                        <textarea className="textarea  grow w-full" placeholder="Bio" defaultValue={personagem?.descricaoUm}></textarea>
+                        <textarea className="textarea  grow w-full" placeholder="Bio"   {...register("descricaoUm")} onBlur={() => handleBlur("descricaoUm")}></textarea>
                     </div>
                     <div className="grow flex-col flex">
 
-                        <textarea className="textarea w-full grow" placeholder="Bio" defaultValue={personagem?.descricaoDois}></textarea>
+                        <textarea className="textarea w-full grow" placeholder="Bio"   {...register("descricaoDois")} onBlur={() => handleBlur("descricaoDois")}
+                        ></textarea>
                     </div>
                 </div>
             </div>

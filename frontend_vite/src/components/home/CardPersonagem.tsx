@@ -5,7 +5,7 @@ export type CardProps = {
     props: Pick<Personagem, "personagemId" | "nome" | "imageUrl" | "pvTotal" | "pv" | "classe"> | undefined
 }
 
-export default ({ props }: CardProps) => {
+const CardPersonagem = ({ props }: CardProps) => {
 
     return (
 
@@ -66,3 +66,5 @@ export default ({ props }: CardProps) => {
         </>
     )
 }
+
+export default CardPersonagem;

@@ -34,17 +34,17 @@ export default function Navbar() {
                 </div>
                 <div className="navbar-end">
                     <select data-choose-theme className="select select-ghost max-w-fit">
-                        <option value="retro">Retro</option>
                         <option value="light">Light</option>
+                        <option value="nord">Nord</option>
+                        <option value="cupcake">Cupcake</option>
+                        <option value="pastel">Pastel</option>
+                        <option value="caramellatte">Caramellatte</option>
+                        <option value="autumn">Autumn</option>
+                        <option value="retro">Retro</option>
                         <option value="dark">Dark</option>
                         <option value="dim">Dimm</option>
                         <option value="night">Night</option>
-                        <option value="cupcake">Cupcake</option>
-                        <option value="nord">Cupcake</option>
-                        <option value="pastel">Pastel</option>
-                        <option value="dracula">Nord</option>
-                        <option value="autumn">Autumn</option>
-                        <option value="caramellatte">Caramellatte</option>
+                        <option value="dracula">Dracula</option>
                     </select>
                 </div>
             </nav>

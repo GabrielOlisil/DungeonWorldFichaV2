@@ -1,17 +1,16 @@
-import { createContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import FeedAcompanhamento from "~/components/home/FeedAcompanhamento"
 import { FetchPersonagemList, Personagem } from "~/models/personagem.model"
 
-export const PersonagensContext = createContext<Personagem[] | undefined>(undefined)
 
 export default function Home() {
 
     const [personagens, setPersonagens] = useState<Personagem[] | undefined>(undefined)
 
     const fetchPersonagem = async () => {
-        let res = await fetch("http://localhost:8000/api/personagens");
+        const res = await fetch("http://localhost:8000/api/personagens");
 
-        let json: FetchPersonagemList = await res.json()
+        const json: FetchPersonagemList = await res.json()
 
         setPersonagens(json.data)
     }
@@ -22,9 +21,11 @@ export default function Home() {
     }, [])
 
     return (
-        <>
+
+        <section>
+
             <FeedAcompanhamento props={personagens} />
-        </>
+        </section>
 
     )
 }
