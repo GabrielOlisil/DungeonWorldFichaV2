@@ -2,7 +2,7 @@ import { FetchPersonagemList, Personagem } from "~/models/personagem.model";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-export default function PersonagemsList() {
+export default function PersonagensList() {
 
     const [personagens, setPersonagem] = useState<Personagem[] | undefined>(undefined)
 
@@ -28,7 +28,7 @@ export default function PersonagemsList() {
     return (
 
 
-        <ul className="list bg-base-100 rounded-box shadow-md lg:w-200 m-auto mt-20">
+        <ul className="list bg-base-100 rounded-box shadow-md lg:w-200 m-auto mt-20 mb-3">
 
             <li className="p-4 pb-2 text-sm opacity-60 tracking-wide">Personagens</li>
 

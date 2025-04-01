@@ -6,7 +6,4 @@ COPY ./src/*.csproj ./
 RUN dotnet restore
 # Copy everything
 
-RUN dotnet tool install --global dotnet-ef
-
-
 COPY ./src ./

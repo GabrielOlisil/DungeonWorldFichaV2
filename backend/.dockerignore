@@ -1,5 +1,5 @@
-bin/
-out/
+**/bin/
+**/obj/
 .idea/
 .vscode/
 .vs/

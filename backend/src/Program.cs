@@ -37,6 +37,6 @@ app.ApplyPendingMigrations();
 
 app.MapGroup("/api").RegisterEndpoints();
 
-app.Urls.Add("http://+:8080");
+app.Urls.Add("http://+:8000");
 
 app.Run();

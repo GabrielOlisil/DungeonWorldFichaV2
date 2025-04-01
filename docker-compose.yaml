@@ -7,6 +7,8 @@ services:
     restart: on-failure
     volumes:
       - ./backend/src:/App
+      - /App/bin
+      - /App/obj
     ports:
       - "8000:8080"
     environment:

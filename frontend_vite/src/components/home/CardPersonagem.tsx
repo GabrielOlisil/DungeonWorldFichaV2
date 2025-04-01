@@ -45,8 +45,15 @@ const CardPersonagem = ({ props }: CardProps) => {
                     }
                     {
                         props
-                            ? <p>{props.pv} / {props.pvTotal}</p>
-                            : <div className="skeleton h-4 w-2/12"></div>
+                            ? <>
+                                <p >Pv/Pv Total</p>
+                                <progress className="progress progress-error " value={props.pv} max={props.pvTotal}></progress>
+                            </>
+                            : <>
+                                <div className="skeleton h-3 w-2/12"></div>
+
+                                <div className="skeleton h-3 "></div>
+                            </>
                     }
 
 
