@@ -24,7 +24,9 @@ export default function Home() {
 
         <section>
 
-            <FeedAcompanhamento props={personagens} />
+
+
+            {personagens && <FeedAcompanhamento props={personagens} />}
         </section>
 
     )

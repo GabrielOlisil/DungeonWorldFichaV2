@@ -7,4 +7,4 @@ shell:
 
 static:
 	docker compose up -d
-	docker exec $(BACKEND) bash -c "dotnet run"
+	docker exec -d $(BACKEND) bash -c "dotnet run"

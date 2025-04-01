@@ -2,10 +2,10 @@
 import shield from "~/assets/shield.png"
 import { FetchPersonagem, Habilidade, Personagem } from "~/models/personagem.model"
 import { useForm } from "react-hook-form";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import PlayDice from "./PlayDice";
 import { PersonagemContext } from "~/context/personagem";
-
+import { PersonagemHubContext } from "~/context/personagemHub"
 
 
 
@@ -13,6 +13,8 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
     const [personagemLocal, setPersonagemLocal] = useState<Personagem | undefined>(props);
 
     const initialPersonagemRef = useRef<Personagem | undefined>(props);
+
+
 
 
 
@@ -50,7 +52,52 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
         }
     }
 
+
+    const hubConn = useContext(PersonagemHubContext);
     useEffect(() => {
+
+        if (!hubConn) return;
+
+        const connect = async () => {
+            if (hubConn.state === "Connected" || hubConn.state === "Connecting" || hubConn.state === "Reconnecting") {
+                return;
+            }
+            try {
+                await hubConn.start();
+                console.log("Connected to SignalR hub");
+
+                await hubConn.invoke("JoinGroup", `${personagemLocal?.personagemId}`);
+                console.log("Entrou no grupo", personagemLocal?.personagemId);
+            } catch (err) {
+                console.error("Erro ao conectar ao hub:", err);
+            }
+        };
+
+        connect();
+
+        const messageHandler = (message: Personagem) => {
+            console.log("Received message:", message);
+            initialPersonagemRef.current = message
+            setPersonagemLocal(message)
+        };
+
+        hubConn.on("messageReceived", messageHandler);
+
+        return () => {
+            if (hubConn.state === "Connected") {
+                hubConn.stop();
+                console.log("SignalR desconectado ao fechar a página.");
+            }
+            hubConn.off("messageReceived", messageHandler);
+        };
+
+    }, [props?.personagemId])
+
+
+    useEffect(() => {
+
+
+
         if (!personagemLocal) return;
 
         if (JSON.stringify(initialPersonagemRef.current) !== JSON.stringify(personagemLocal)) {

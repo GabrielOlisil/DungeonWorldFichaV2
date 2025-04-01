@@ -50,9 +50,11 @@ export default function DetailPersonagem() {
 
     return (
 
+
+
         <section className="pt-3">
 
-            <BarraHabilidades props={personagem} />
+            {<BarraHabilidades props={personagem} />}
         </section>
     )
 

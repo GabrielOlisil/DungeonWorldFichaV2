@@ -1,6 +1,6 @@
 using backend.Application.Endpoints;
 using backend.Domain.Databases;
-using backend.Models;
+using backend.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 

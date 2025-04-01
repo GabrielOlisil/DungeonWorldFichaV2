@@ -1,7 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-
-
-namespace backend.Models;
+namespace backend.Domain.Models;
 
 public record Personagem
 {
