@@ -1,8 +1,10 @@
+import { useKeycloak } from "@react-keycloak/web";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { themeChange } from "theme-change";
 
 export default function Navbar() {
+    const { keycloak } = useKeycloak()
     useEffect(() => {
         themeChange(false)
         // 👆 false parameter is required for react project
@@ -25,7 +27,7 @@ export default function Navbar() {
                             <li><Link to="/">Homepage</Link></li>
                             <li><Link to="/personagens">Personagens</Link></li>
                             <li><Link to="/personagens/novo">Criar</Link></li>
-                            {/* <li><span onClick={() => keycloak.logout({ redirectUri: "http://localhost:3000/" })}>Sair</span></li> */}
+                            <li><span onClick={() => keycloak.logout({ redirectUri: "http://localhost:5173/" })}>Sair</span></li>
                         </ul>
                     </div>
                 </div>

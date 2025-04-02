@@ -10,12 +10,15 @@ public static class Extensions
 {
     public static void RegisterEndpoints(this RouteGroupBuilder group)
     {
-        group.MapGet("/personagens",   PersonagemEndpoints.PersonagemList);
-        group.MapGet("/personagens/{id:long}", PersonagemEndpoints.PersonagemById);
-        group.MapPost("/personagens/", PersonagemEndpoints.CreatePersonagem);
-        group.MapPatch("/personagens/{id:long}", PersonagemEndpoints.AtualizarPersonagemPartial);
-        group.MapDelete("/personagens/{id:long}", PersonagemEndpoints.DeletePersonagem);
-        group.MapPut("/personagens/{id:long}", PersonagemEndpoints.AtualizarPersonagem);
+        group.MapGet("/personagens",   PersonagemEndpoints.PersonagemList).RequireAuthorization(opt =>
+        {
+            opt.RequireRole("player");
+        });
+        group.MapGet("/personagens/{id:long}", PersonagemEndpoints.PersonagemById).RequireAuthorization();
+        group.MapPost("/personagens/", PersonagemEndpoints.CreatePersonagem).RequireAuthorization();
+        group.MapPatch("/personagens/{id:long}", PersonagemEndpoints.AtualizarPersonagemPartial).RequireAuthorization();
+        group.MapDelete("/personagens/{id:long}", PersonagemEndpoints.DeletePersonagem).RequireAuthorization();
+        group.MapPut("/personagens/{id:long}", PersonagemEndpoints.AtualizarPersonagem).RequireAuthorization();
     }
     
     public static void ApplyPendingMigrations(this IApplicationBuilder app)

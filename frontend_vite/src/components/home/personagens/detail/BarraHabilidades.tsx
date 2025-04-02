@@ -6,6 +6,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import PlayDice from "./PlayDice";
 import { PersonagemContext } from "~/context/personagem";
 import { PersonagemHubContext } from "~/context/personagemHub"
+import TokenContext from "~/context/TokenProvider";
 
 
 
@@ -17,6 +18,7 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
 
 
 
+    const token = useContext(TokenContext)
 
 
 
@@ -29,6 +31,8 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
             const response = await fetch(`http://localhost:8000/api/personagens/${person?.personagemId}`, {
                 method: "PUT",
                 headers: {
+                    "Authorization": `Bearer ${token}`,
+
                     "Content-Type": "application/json",
                 },
                 body

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import { FetchPersonagem, Personagem } from "~/models/personagem.model";
 import BarraHabilidades from "../../../components/home/personagens/detail/BarraHabilidades";
+import TokenContext from "~/context/TokenProvider";
 
 
 
@@ -11,10 +12,18 @@ export default function DetailPersonagem() {
     const [personagem, setPersonagem] = useState<Personagem | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const token = useContext(TokenContext)
 
     const fetchPersonagem = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/personagens/${id}`);
+            const response = await fetch(`http://localhost:8000/api/personagens/${id}`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
             const result: FetchPersonagem = await response.json();
 
             if (result.data === null) {

@@ -1,13 +1,20 @@
 import { FetchPersonagemList, Personagem } from "~/models/personagem.model";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import TokenContext from "~/context/TokenProvider";
 
 export default function PersonagensList() {
 
     const [personagens, setPersonagem] = useState<Personagem[] | undefined>(undefined)
+    const token = useContext(TokenContext)
 
     const fetchData = async () => {
-        const data = await fetch('http://localhost:8000/api/personagens')
+        const data = await fetch('http://localhost:8000/api/personagens', {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
         const personagens: FetchPersonagemList = await data.json();
         setPersonagem(personagens.data);
     }

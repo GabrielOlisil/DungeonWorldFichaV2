@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Notificacao, { notificacoes } from "~/components/home/personagens/notificacao";
+import TokenContext from "~/context/TokenProvider";
 import { FetchPersonagem, Personagem } from "~/models/personagem.model";
 
 export default function NovoPersonagem() {
@@ -16,6 +17,7 @@ export default function NovoPersonagem() {
     } = useForm<Personagem>()
 
     const router = useNavigate();
+    const token = useContext(TokenContext)
 
     const onSubmit: SubmitHandler<Personagem> = async (data) => {
 
@@ -31,9 +33,10 @@ export default function NovoPersonagem() {
         const body = JSON.stringify(personagem);
 
         try {
-            const response = await fetch("http://localhost:800/api/personagens", {
+            const response = await fetch("http://localhost:8000/api/personagens", {
                 method: "POST",
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json",
                 },
                 body
