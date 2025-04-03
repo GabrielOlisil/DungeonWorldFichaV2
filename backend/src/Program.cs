@@ -15,7 +15,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost3000", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") 
+        policy.WithOrigins("http://localhost:3000") 
             .AllowAnyMethod()                     
             .AllowAnyHeader()                     
             .AllowCredentials(); 
@@ -26,41 +26,46 @@ builder.Services.AddCors(options =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = "http://localhost:8080/realms/dungeon_world_app";
-        options.Audience = "dungeon_client";
+
+        // Para as demais operações, podemos deixar a Authority (não será usada para buscar metadados, pois MetadataAddress foi definido)
+        options.Audience = "account";
         options.RequireHttpsMetadata = false; // Apenas para desenvolvimento
+        options.MetadataAddress = "http://keycloak:8080/realms/dungeon_world_app/.well-known/openid-configuration";
 
         options.TokenValidationParameters = new TokenValidationParameters()
         {
-            NameClaimType = ClaimTypes.Name,
-            RoleClaimType = ClaimTypes.Role, // 🔹 Definimos "roles" como padrão
-            ValidateIssuer = true,
+            
+            ValidateIssuer = false, 
+            ValidIssuer = "http://localhost:8080/realms/dungeon_world_app",
+                    
+
             ValidateAudience = false,
-            ValidateIssuerSigningKey = true,
+            ValidateIssuerSigningKey = false,
+            
         };
 
-        options.Events = new JwtBearerEvents
-        {
-            OnTokenValidated = context =>
-            {
-                var identity = (ClaimsIdentity)context.Principal.Identity;
-                var roleClaims = context.Principal.FindFirst("realm_access")?.Value;
-
-                if (!string.IsNullOrEmpty(roleClaims))
-                {
-                    var roles = JsonSerializer.Deserialize<JsonElement>(roleClaims);
-                    if (roles.TryGetProperty("roles", out var roleArray))
-                    {
-                        foreach (var role in roleArray.EnumerateArray())
-                        {
-                            identity.AddClaim(new Claim(ClaimTypes.Role, role.GetString()));
-                        }
-                    }
-                }
-
-                
-                return Task.CompletedTask;
-            }
+         options.Events = new JwtBearerEvents
+         {
+             OnTokenValidated = context =>
+             {
+                 var identity = (ClaimsIdentity)context.Principal.Identity;
+                 var roleClaims = context.Principal.FindFirst("realm_access")?.Value;
+        
+                 if (!string.IsNullOrEmpty(roleClaims))
+                 {
+                     var roles = JsonSerializer.Deserialize<JsonElement>(roleClaims);
+                     if (roles.TryGetProperty("roles", out var roleArray))
+                     {
+                         foreach (var role in roleArray.EnumerateArray())
+                         {
+                             identity.AddClaim(new Claim(ClaimTypes.Role, role.GetString()));
+                         }
+                     }
+                 }
+        
+                 
+                 return Task.CompletedTask;
+             }
         };
     });
 
@@ -77,7 +82,7 @@ app.ApplyPendingMigrations();
 
 app.MapGroup("/api").RegisterEndpoints();
 
-app.Urls.Add("http://+:8000");
+app.Urls.Add("http://+:8080");
 app.MapHub<PersonagemHub>("/personagensHub").RequireCors("AllowLocalhost3000");
 
 app.Run();
