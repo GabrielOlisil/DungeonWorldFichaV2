@@ -423,6 +423,8 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
 
             </div>
 
+            <div className="divider">Rolar Dados</div>
+
             <PersonagemContext.Provider value={personagemLocal}>
                 <PlayDice />
 

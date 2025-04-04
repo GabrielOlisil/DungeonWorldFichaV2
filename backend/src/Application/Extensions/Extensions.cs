@@ -14,11 +14,28 @@ public static class Extensions
         {
             opt.RequireRole("player");
         });
-        group.MapGet("/personagens/{id:long}", PersonagemEndpoints.PersonagemById).RequireAuthorization();
-        group.MapPost("/personagens/", PersonagemEndpoints.CreatePersonagem).RequireAuthorization();
-        group.MapPatch("/personagens/{id:long}", PersonagemEndpoints.AtualizarPersonagemPartial).RequireAuthorization();
-        group.MapDelete("/personagens/{id:long}", PersonagemEndpoints.DeletePersonagem).RequireAuthorization();
-        group.MapPut("/personagens/{id:long}", PersonagemEndpoints.AtualizarPersonagem).RequireAuthorization();
+        group.MapGet("/personagens/{id:long}", PersonagemEndpoints.PersonagemById).RequireAuthorization(opt =>
+        {
+            opt.RequireRole("player");
+        });
+        group.MapPost("/personagens/", PersonagemEndpoints.CreatePersonagem).RequireAuthorization(opt =>
+        {
+            opt.RequireRole("player");
+        });
+        group.MapPatch("/personagens/{id:long}", PersonagemEndpoints.AtualizarPersonagemPartial).RequireAuthorization(opt =>
+        {
+            opt.RequireRole("player");
+        });
+        group.MapDelete("/personagens/{id:long}", PersonagemEndpoints.DeletePersonagem).RequireAuthorization(opt =>
+        {
+            opt.RequireRole("player");
+        });
+        group.MapPut("/personagens/{id:long}", PersonagemEndpoints.AtualizarPersonagem).RequireAuthorization(opt =>
+        {
+            opt.RequireRole("player");
+        });
+
+        group.MapGet("/dados", DadosEndpoints.RollDamage);
     }
     
     public static void ApplyPendingMigrations(this IApplicationBuilder app)

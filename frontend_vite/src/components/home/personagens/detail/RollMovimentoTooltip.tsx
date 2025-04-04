@@ -1,5 +1,8 @@
-import { useContext } from "react";
-import { Habilidade } from "~/models/personagem.model";
+import { useContext, useEffect, useState } from "react";
+import { getAtributeModifier, Habilidade } from "~/models/personagem.model";
+
+import keycloak from "~/lib/keycloak";
+
 
 export type RollMovimentoTooltipProps = {
     movimento: string
@@ -23,12 +26,27 @@ import { PersonagemContext } from "~/context/personagem";
 
 export default function RollMovimentoTooltip({ props }: { props: RollMovimentoTooltipProps | undefined }) {
 
+
+
     const personagem = useContext(PersonagemContext)
+
+    const [atribute, setAtribute] = useState<string | undefined>(props?.atributo)
+
+    const [modifier, setModifier] = useState<string>()
+
+    const RollDice = () => {
+        console.log({ nome: keycloak.tokenParsed?.preferred_username, atributo: atribute, modificador: modifier })
+    }
+
+    useEffect(() => {
+        setModifier(getAtributeModifier(personagem!.habilidade[atribute as keyof Habilidade]))
+
+    }, [atribute])
 
     return (
         <>
-            <div className="flex items-center gap-2 ">
-                <div className="mask mask-hexagon w-12 cursor-pointer shrink-0 h-12 bg-success flex items-center justify-center">
+            <div className="flex items-center gap-2 mb-3">
+                <div onClick={RollDice} className="mask mask-hexagon w-12 cursor-pointer shrink-0 h-12 bg-success flex items-center justify-center">
                     <pre className="text-success-content "><code>2d6</code></pre>
                 </div>
                 <div className="tooltip tooltip-accent tooltip-right self-center">
@@ -50,7 +68,7 @@ export default function RollMovimentoTooltip({ props }: { props: RollMovimentoTo
 
 
 
-                <select defaultValue={props?.atributo} className="select select-ghost self-center max-w-fit cursor-pointer">
+                <select defaultValue={atribute} onChange={(e) => { setAtribute(e.target.value) }} className="select select-ghost self-center max-w-fit cursor-pointer">
                     {Object.entries(listProperties).map(([atributo, sigla]) => (
                         <option key={atributo} value={atributo}>
                             {sigla.toUpperCase()}
@@ -58,7 +76,7 @@ export default function RollMovimentoTooltip({ props }: { props: RollMovimentoTo
                     ))}
                 </select>
 
-                {personagem && <><div className="badge badge-primary">{personagem.habilidade[props?.atributo as keyof Habilidade]}</div></>}
+                {personagem && <><div className="badge badge-primary">{modifier}</div></>}
             </div>
         </>
     );

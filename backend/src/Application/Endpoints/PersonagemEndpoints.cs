@@ -122,7 +122,8 @@ public static class PersonagemEndpoints
                 await personagemHub.Clients.Group(personagem.PersonagemId.ToString())
                     .SendAsync("messageReceived", personagem);
                 
-                await personagemHub.Clients.All.SendAsync("messageReceived", personagem);
+                await personagemHub.Clients.Group("geral")
+                    .SendAsync("messageReceived", personagem);
                 
                 return TypedResults.Json(
                     new ResponseInterface<Personagem>(true, "Personagem Atualizado com sucesso",

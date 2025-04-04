@@ -13,7 +13,17 @@ public class PersonagemHub : Hub
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
     }
     
-    public async Task LeaveGroup(string groupName)
+    public async Task JoinGroupGeral()
+    {
+        await Groups.AddToGroupAsync(Context.ConnectionId, "geral");
+    }
+    
+    public async Task LeaveGroup()
+    {
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, "geral");
+    }
+    
+    public async Task LeaveGroupGeral(string groupName)
     {
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
     }

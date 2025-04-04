@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Text.Json;
+using backend.Application.Endpoints;
 using backend.Application.Extensions;
 using backend.Application.Hubs;
 using backend.Domain.Databases;
@@ -9,13 +10,14 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost3000", policy =>
     {
-        policy.WithOrigins("http://localhost:3000") 
+        policy.WithOrigins("http://localhost:5173") 
             .AllowAnyMethod()                     
             .AllowAnyHeader()                     
             .AllowCredentials(); 
@@ -30,13 +32,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         // Para as demais operações, podemos deixar a Authority (não será usada para buscar metadados, pois MetadataAddress foi definido)
         options.Audience = "account";
         options.RequireHttpsMetadata = false; // Apenas para desenvolvimento
-        options.MetadataAddress = "http://keycloak:8080/realms/dungeon_world_app/.well-known/openid-configuration";
+        options.MetadataAddress = builder.Configuration["Keycloak:MetadataAddress"]!; 
 
         options.TokenValidationParameters = new TokenValidationParameters()
         {
             
             ValidateIssuer = false, 
-            ValidIssuer = "http://localhost:8080/realms/dungeon_world_app",
+            ValidIssuer = builder.Configuration["Keycloak:ValidIssuer"],
                     
 
             ValidateAudience = false,
@@ -54,12 +56,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                  if (!string.IsNullOrEmpty(roleClaims))
                  {
                      var roles = JsonSerializer.Deserialize<JsonElement>(roleClaims);
-                     if (roles.TryGetProperty("roles", out var roleArray))
+                     if (!roles.TryGetProperty("roles", out var roleArray)) return Task.CompletedTask;
+                     foreach (var role in roleArray.EnumerateArray())
                      {
-                         foreach (var role in roleArray.EnumerateArray())
-                         {
-                             identity.AddClaim(new Claim(ClaimTypes.Role, role.GetString()));
-                         }
+                         identity.AddClaim(new Claim(ClaimTypes.Role, role.GetString()));
                      }
                  }
         
@@ -82,7 +82,7 @@ app.ApplyPendingMigrations();
 
 app.MapGroup("/api").RegisterEndpoints();
 
-app.Urls.Add("http://+:8080");
+app.Urls.Add("http://+:8000");
 app.MapHub<PersonagemHub>("/personagensHub").RequireCors("AllowLocalhost3000");
 
 app.Run();

@@ -3,14 +3,14 @@ import RollMovimentoTooltip, { RollMovimentoTooltipProps } from "./RollMovimento
 const PlayDice = () => {
 
     return (
-        <>
+        <section className="pb-10">
 
             {movimentos.map((mov, index) => {
 
                 return <RollMovimentoTooltip props={mov} key={index} />
 
             })}
-        </>
+        </section>
     )
 }
 

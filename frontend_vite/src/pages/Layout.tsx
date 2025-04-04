@@ -10,6 +10,8 @@ function HomeLayout() {
   const [loading, setLoading] = useState(true); // Novo estado para evitar erro
 
   useEffect(() => {
+    if (keycloak.didInitialize) return;
+
     keycloak
       .init({ onLoad: "login-required", checkLoginIframe: false, flow: "implicit" }) // Evita recarregamento excessivo
       .then((auth) => {

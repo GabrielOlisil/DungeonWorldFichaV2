@@ -35,3 +35,14 @@ export type FetchPersonagem = {
     message: string;
     data: Personagem;
 }
+
+export const getAtributeModifier = (atribute: number) => {
+
+    if (atribute === 18) return "+3";
+    if (atribute >= 16) return "+2";
+    if (atribute >= 13) return "+1";
+    if (atribute >= 9) return "+0";
+    if (atribute >= 6) return "-1";
+    if (atribute >= 4) return "-2";
+    return "-3";
+}
