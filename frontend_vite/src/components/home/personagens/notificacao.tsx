@@ -11,7 +11,6 @@ export type notificacoes = {
 export default function Notificacao({ props }: notificacaoProps) {
 
 
-    console.log(props)
 
     return (
         <div className="toast toast-end">

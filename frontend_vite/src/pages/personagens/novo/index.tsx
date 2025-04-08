@@ -45,7 +45,7 @@ export default function NovoPersonagem() {
             const personagem: FetchPersonagem = await response.json();
 
             if (response.ok) {
-                router(`/personagens/${personagem.data.personagemId}/detalhar`)
+                router(`/personagens/${personagem.data.personagemId}`)
                 return;
             }
 

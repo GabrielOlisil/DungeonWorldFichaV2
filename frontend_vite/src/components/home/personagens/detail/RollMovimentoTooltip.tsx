@@ -50,43 +50,35 @@ export default function RollMovimentoTooltip({ props }: { props: RollMovimentoTo
     useEffect(() => {
         setModifier(getAtributeModifier(personagem!.habilidade[atribute as keyof Habilidade]))
 
-    }, [atribute])
+    }, [atribute, personagem])
 
     return (
         <>
-            <div className="flex items-center gap-2 mb-3">
-                <div onClick={RollDice} className="mask mask-hexagon w-12 cursor-pointer shrink-0 h-12 bg-success flex items-center justify-center">
-                    <pre className="text-success-content "><code>2d6</code></pre>
-                </div>
-                <div className="tooltip tooltip-accent tooltip-right self-center">
-                    {props?.descricao &&
-                        <div className="tooltip-content p-3">
-                            <div className="">{props.descricao}</div>
-                        </div>
-                    }
-                    <div className="">
-
-                        {
-                            props?.movimento
-                                ? <p className="self-center">{props.movimento}</p>
-                                : <div className="skeleton w-40 h-5 self-center"></div>
-                        }
-                    </div>
-                </div>
-
-
-
-
-                <select defaultValue={atribute} onChange={(e) => { setAtribute(e.target.value) }} className="select select-ghost self-center max-w-fit cursor-pointer">
-                    {Object.entries(listProperties).map(([atributo, sigla]) => (
-                        <option key={atributo} value={atributo}>
-                            {sigla.toUpperCase()}
-                        </option>
-                    ))}
-                </select>
-
-                {personagem && <><div className="badge badge-primary">{modifier}</div></>}
+            <div onClick={RollDice} className="mask mask-hexagon w-12 cursor-pointer shrink-0 h-12 bg-success flex items-center justify-center justify-self-center">
+                <pre className="text-success-content "><code>2d6</code></pre>
             </div>
+
+            <div className="col-span-2">
+
+                {
+                    props?.movimento
+                        ? <p className="self-center ">{props.movimento}</p>
+                        : <div className="skeleton w-40 h-5 self-center"></div>
+                }
+            </div>
+
+
+
+
+            <select defaultValue={atribute} onChange={(e) => { setAtribute(e.target.value) }} className="select select-ghost self-center   max-w-fit cursor-pointer">
+                {Object.entries(listProperties).map(([atributo, sigla]) => (
+                    <option key={atributo} value={atributo}>
+                        {sigla.toUpperCase()}
+                    </option>
+                ))}
+            </select>
+
+            {personagem && <><div className="badge badge-primary font-mono ">{modifier}</div></>}
         </>
     );
 }

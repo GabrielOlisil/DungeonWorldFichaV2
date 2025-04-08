@@ -20,7 +20,6 @@ export default function PersonagensList() {
     }
 
     useEffect(() => {
-        console.log("chegou aqui")
         fetchData()
     }, []);
 

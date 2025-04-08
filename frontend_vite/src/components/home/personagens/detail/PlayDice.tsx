@@ -3,7 +3,7 @@ import RollMovimentoTooltip, { RollMovimentoTooltipProps } from "./RollMovimento
 const PlayDice = () => {
 
     return (
-        <section className="pb-10">
+        <section className="pb-10 grid grid-cols-5 items-center  gap-3 max-w-fit">
 
             {movimentos.map((mov, index) => {
 

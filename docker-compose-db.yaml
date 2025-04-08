@@ -1,20 +1,19 @@
 services:
+
+  dice_service:
+    build: ./dice_service
+    restart: always
+   
   db:
     image: mariadb:11.7-noble
     volumes:
       - db_data:/var/lib/mysql
     restart: always
     ports:
-      - "3306:3306"
+      - '3306:3306'
     environment:
       MARIADB_ROOT_PASSWORD: my-secret-pw
       MYSQL_DATABASE: dungeon_world_v2
-
-  adminer:
-    image: adminer:latest
-    ports:
-      - "9002:8080"
-    restart: always
 
   keycloak:
     image: quay.io/keycloak/keycloak:26.1.4
@@ -27,15 +26,26 @@ services:
       - KC_DB_USERNAME=root #
       - KC_DB_PASSWORD=my-secret-pw  #
       - KC_HOSTNAME_STRICT=false
-
     command: ["start", "--http-enabled=true", "--verbose"]
     ports:
       - 8080:8080
     depends_on:
       - db
-    restart: always
+    restart: unless-stopped
 
- 
+
+  rabbitmq:
+    image: rabbitmq:3-management 
+    container_name: rabbitmq
+    ports:
+      - "8002:15692"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      
 volumes:
   db_data:
-  postgres_data:
+  rabbitmq_data:

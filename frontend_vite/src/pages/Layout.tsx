@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "~/components/home/Navbar";
 import { NotificationExplorer } from "~/components/home/Notifications";
 import { DadosHubContext } from "~/context/DiceHubContext";
-import { NotificacoesContext } from "~/context/NotificationContext";
+import { NotificacoesContext, NotificacoesType } from "~/context/NotificationContext";
 import { PersonagemContext } from "~/context/personagem";
 import TokenContext from "~/context/TokenProvider";
 import keycloak from "~/lib/keycloak";
@@ -19,7 +19,7 @@ type RollMessage = {
 function HomeLayout() {
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true); // Novo estado para evitar erro
-  const [notificacoes, setNotificacoes] = useState<string[] | undefined>(undefined)
+  const [notificacoes, setNotificacoes] = useState<NotificacoesType[] | undefined>(undefined)
 
 
 
@@ -58,10 +58,8 @@ function HomeLayout() {
       }
       try {
         await dadosHubContext.start();
-        console.log("Connected to diceHub");
 
         await dadosHubContext.invoke("JoinGroupGeral");
-        console.log("Entrou no grupo", "geral");
       } catch (err) {
         console.error("Erro ao conectar ao hub:", err);
       }
@@ -73,16 +71,17 @@ function HomeLayout() {
     dadosHubContext.on("messageReceived", (msg) => {
       let json: RollMessage = JSON.parse(msg)
 
-      setNotificacoes(prev => [...(prev ?? []), `${json.Personagem} rolou ${json.Modalidade}:\n${json.Output}`])
+      setNotificacoes(prev => [...(prev ?? []), {
+        title: `${json.Personagem} rolou ${json.Modalidade}:`,
+        content: `\n${json.Output}`
+      }])
 
 
-      console.log(json)
     });
 
     return () => {
       if (dadosHubContext.state === "Connected") {
         dadosHubContext.stop();
-        console.log("SignalR desconectado ao fechar a página.");
       }
       dadosHubContext.off("messageReceived", message => console.log(message));
     };

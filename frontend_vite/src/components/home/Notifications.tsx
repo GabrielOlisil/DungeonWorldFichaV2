@@ -19,9 +19,14 @@ export const NotificationExplorer = () => {
             <aside className="toast">
                 {notificacoes?.notificacoes?.map((n, index) => {
                     return (
-                        <div className="alert alert-info">
-                            <span key={index}>{n}</span>
-                            <CircleX onClick={() => removeNotify(index)} />
+                        <div key={index} className="alert alert-error flex alert-soft">
+                            <div>
+
+                                <div className="font-bold">{n.title}</div>
+                                <div className="divider"></div>
+                                <div className="text-lg">{n.content}</div>
+                            </div>
+                            <CircleX className="self-start" onClick={() => removeNotify(index)} />
                         </div>
                     )
                 })}

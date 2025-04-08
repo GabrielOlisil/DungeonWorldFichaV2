@@ -68,10 +68,8 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
             }
             try {
                 await hubConn.start();
-                console.log("Connected to SignalR hub");
 
                 await hubConn.invoke("JoinGroup", `${personagemLocal?.personagemId}`);
-                console.log("Entrou no grupo", personagemLocal?.personagemId);
             } catch (err) {
                 console.error("Erro ao conectar ao hub:", err);
             }
@@ -80,7 +78,6 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
         connect();
 
         const messageHandler = (message: Personagem) => {
-            console.log("Received message:", message);
             initialPersonagemRef.current = message
             setPersonagemLocal(message)
         };
@@ -90,7 +87,6 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
         return () => {
             if (hubConn.state === "Connected") {
                 hubConn.stop();
-                console.log("SignalR desconectado ao fechar a página.");
             }
             hubConn.off("messageReceived", messageHandler);
         };

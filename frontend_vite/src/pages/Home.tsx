@@ -1,3 +1,4 @@
+import { SendHorizontal } from "lucide-react"
 import { useContext, useEffect, useState } from "react"
 import FeedAcompanhamento from "~/components/home/FeedAcompanhamento"
 import TokenContext from "~/context/TokenProvider"
@@ -29,11 +30,27 @@ export default function Home() {
 
     return (
 
-        <section className="pb-5">
-
-
+        <section className="relative">
 
             {personagens && <FeedAcompanhamento props={personagens} />}
+
+            <div className="fixed bottom-10 w-full">
+                <div className="m-auto max-w-100 flex justify-center">
+                    <div className="join grow">
+                        <div className="w-full">
+                            <label className="input w-full validator join-item">
+                                <input type="text " className="w-full" placeholder="Rolar Dado" required />
+                            </label>
+                            <div className="validator-hint hidden">Enter valid email address</div>
+                        </div>
+                        <button className="join-item bg-neutral text-neutral-content p-2 cursor-pointer">
+                            <SendHorizontal />
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
         </section>
 
     )
