@@ -1,7 +1,7 @@
 import amqp from "amqplib/callback_api.js";
 import { DiceRoll } from "@dice-roller/rpg-dice-roller";
 
-const RABBITMQ_URL = "amqp://user:password@localhost";
+const RABBITMQ_URL = "amqp://user:password@rabbitmq";
 const QUEUE_NAME = "pushRoll";
 const QUEUE_OUTPUT_NAME = "RollResult";
 

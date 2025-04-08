@@ -8,12 +8,17 @@ services:
       - ASPNETCORE_URLS=http://+:8080
     depends_on:
       - db
+      - rabbitmq
   
   frontend:
     build: ./frontend_vite
     restart: always
     ports: 
       - "3000:3000"
+
+  dice_service:
+    build: ./dice_service
+    restart: always
    
   db:
     image: mariadb:11.7-noble
@@ -30,31 +35,31 @@ services:
     environment:
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin  #
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin  #
-      - KC_DB=postgres #
-      - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak?createDatabaseIfNotExist=true&characterEncoding=UTF-8&rewriteBatchedStatements=true&enabledTLSProtocols=TLSv1,TLSv1.1,TLSv1.2
-      - KC_DB_USERNAME=keycloak #
-      - KC_DB_PASSWORD=password  #
+      - KC_DB=mariadb #
+      - KC_DB_URL=jdbc:mariadb://db:3306/keycloak?createDatabaseIfNotExist=true&characterEncoding=UTF-8&rewriteBatchedStatements=true&enabledTLSProtocols=TLSv1,TLSv1.1,TLSv1.2
+      - KC_DB_USERNAME=root #
+      - KC_DB_PASSWORD=my-secret-pw  #
       - KC_HOSTNAME_STRICT=false
-    
-
     command: ["start", "--http-enabled=true", "--verbose"]
     ports:
       - 8080:8080
     depends_on:
-      - postgres
+      - db
     restart: unless-stopped
 
-  postgres:
-    image: postgres:17.4-alpine3.21
-    container_name: postgres
+
+  rabbitmq:
+    image: rabbitmq:3-management 
+    container_name: rabbitmq
+    ports:
+      - "8002:15692"
+      - "5672:5672"
     environment:
-      - POSTGRES_USER=keycloak
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=keycloak
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
+      - rabbitmq_data:/var/lib/rabbitmq
       
 volumes:
   db_data:
-  postgres_data:
+  rabbitmq_data:

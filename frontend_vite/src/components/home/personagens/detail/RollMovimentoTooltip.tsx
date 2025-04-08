@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { getAtributeModifier, Habilidade } from "~/models/personagem.model";
 
-import keycloak from "~/lib/keycloak";
 
 
 export type RollMovimentoTooltipProps = {

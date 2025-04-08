@@ -1,4 +1,4 @@
-import { CircleX, X } from "lucide-react"
+import { CircleX } from "lucide-react"
 import { useContext } from "react"
 import { NotificacoesContext } from "~/context/NotificationContext"
 
