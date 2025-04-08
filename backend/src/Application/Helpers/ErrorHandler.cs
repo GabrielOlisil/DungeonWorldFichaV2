@@ -1,5 +1,5 @@
 using System.Data.Common;
-using backend.Extensions.Application.Interfaces;
+using backend.Application.Wrappers;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Application.Helpers;
@@ -15,16 +15,16 @@ public static class ErrorHandler
         catch (DbUpdateException e)
         {
             return TypedResults.Json(
-                new ResponseInterface<string>(false, "Erro ao inserir elementos no banco de dados", null),
+                new ResponseWrapper<string>(false, "Erro ao inserir elementos no banco de dados", null),
                 statusCode: StatusCodes.Status400BadRequest
             );
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            
+
             return TypedResults.Json(
-                new ResponseInterface<string>(false, $"Erro interno", null),
+                new ResponseWrapper<string>(false, $"Erro interno", null),
                 statusCode: StatusCodes.Status500InternalServerError
             );
         }

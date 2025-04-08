@@ -1,3 +1,5 @@
+using backend.Domain.Enums;
+
 namespace backend.Domain.Models;
 
 public record Personagem
@@ -5,7 +7,7 @@ public record Personagem
     public long PersonagemId { get; set; }
 
     public string? ImageUrl { get; set; }
-    
+
     public string? Nome { get; set; }
 
     public int Pv { get; set; }
@@ -25,7 +27,7 @@ public record Personagem
     public string? Equipamento { get; set; }
 
     public string? DescricaoDois { get; set; }
-    
+
     public Habilidade? Habilidade { get; set; }
 
     public override string ToString()
@@ -51,5 +53,34 @@ public record Personagem
                     Sabedoria = {Habilidade?.Sabedoria ?? 0}
                     Carisma = {Habilidade?.Carisma ?? 0}
                 """;
+    }
+
+    public int ObterModificador(Habilidades atributo)
+    {
+        if (Habilidade is null)
+            return 0;
+
+        var nome = atributo.ToString(); // Ex: "Forca"
+        var propriedade = typeof(Habilidade).GetProperty(nome);
+
+        if (propriedade == null)
+            throw new ArgumentException($"Atributo '{atributo}' inválido.");
+
+        var valor = (int)(propriedade.GetValue(Habilidade) ?? 0);
+        return CalcularModificador(valor);
+    }
+
+    private int CalcularModificador(int valor)
+    {
+        return valor switch
+        {
+            18 => 3,
+            >= 16 => 2,
+            >= 13 => 1,
+            >= 9 => 0,
+            >= 6 => -1,
+            >= 4 => -2,
+            _ => -3
+        };
     }
 }

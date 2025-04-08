@@ -35,7 +35,17 @@ export default function RollMovimentoTooltip({ props }: { props: RollMovimentoTo
     const [modifier, setModifier] = useState<string>()
 
     const RollDice = () => {
-        console.log({ nome: keycloak.tokenParsed?.preferred_username, atributo: atribute, modificador: modifier })
+
+        fetch("http://localhost:8000/api/dados", {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({
+                id: personagem?.personagemId,
+                atributo: atribute
+            })
+        });
     }
 
     useEffect(() => {

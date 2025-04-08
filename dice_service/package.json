@@ -1,0 +1,27 @@
+{
+  "name": "dice_service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsc --noEmit && node src/index.ts",
+    "build": "node build.js",
+    "start": "node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@dice-roller/rpg-dice-roller": "^5.5.1",
+    "amqplib": "^0.10.7",
+    "fastify": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.10.7",
+    "@types/node": "^22.14.0",
+    "esbuild": "0.25.2",
+    "typescript": "^5.8.3"
+  }
+}

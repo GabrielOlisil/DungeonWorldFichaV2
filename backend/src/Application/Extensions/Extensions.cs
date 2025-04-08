@@ -10,7 +10,7 @@ public static class Extensions
 {
     public static void RegisterEndpoints(this RouteGroupBuilder group)
     {
-        group.MapGet("/personagens",   PersonagemEndpoints.PersonagemList).RequireAuthorization(opt =>
+        group.MapGet("/personagens", PersonagemEndpoints.PersonagemList).RequireAuthorization(opt =>
         {
             opt.RequireRole("player");
         });
@@ -19,10 +19,6 @@ public static class Extensions
             opt.RequireRole("player");
         });
         group.MapPost("/personagens/", PersonagemEndpoints.CreatePersonagem).RequireAuthorization(opt =>
-        {
-            opt.RequireRole("player");
-        });
-        group.MapPatch("/personagens/{id:long}", PersonagemEndpoints.AtualizarPersonagemPartial).RequireAuthorization(opt =>
         {
             opt.RequireRole("player");
         });
@@ -35,9 +31,9 @@ public static class Extensions
             opt.RequireRole("player");
         });
 
-        group.MapGet("/dados", DadosEndpoints.RollDamage);
+        group.MapPost("/dados", DadosEndpoints.RollDamage);
     }
-    
+
     public static void ApplyPendingMigrations(this IApplicationBuilder app)
     {
         using var serviceScope = app.ApplicationServices.CreateScope();

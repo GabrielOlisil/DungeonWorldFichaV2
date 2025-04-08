@@ -1,13 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "~/components/home/Navbar";
+import { NotificationExplorer } from "~/components/home/Notifications";
+import { DadosHubContext } from "~/context/DiceHubContext";
+import { NotificacoesContext } from "~/context/NotificationContext";
 import { PersonagemContext } from "~/context/personagem";
 import TokenContext from "~/context/TokenProvider";
 import keycloak from "~/lib/keycloak";
 
+type RollMessage = {
+  Personagem: string,
+  DicePrompt: string,
+  Output: string | null,
+  Modalidade: string
+}
+
+
 function HomeLayout() {
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true); // Novo estado para evitar erro
+  const [notificacoes, setNotificacoes] = useState<string[] | undefined>(undefined)
+
+
+
 
   useEffect(() => {
     if (keycloak.didInitialize) return;
@@ -32,6 +47,48 @@ function HomeLayout() {
     };
   }, []);
 
+
+  const dadosHubContext = useContext(DadosHubContext)
+  useEffect(() => {
+    if (!dadosHubContext) return;
+
+    const connect = async () => {
+      if (dadosHubContext.state === "Connected" || dadosHubContext.state === "Connecting" || dadosHubContext.state === "Reconnecting") {
+        return;
+      }
+      try {
+        await dadosHubContext.start();
+        console.log("Connected to diceHub");
+
+        await dadosHubContext.invoke("JoinGroupGeral");
+        console.log("Entrou no grupo", "geral");
+      } catch (err) {
+        console.error("Erro ao conectar ao hub:", err);
+      }
+    }
+    connect();
+
+
+
+    dadosHubContext.on("messageReceived", (msg) => {
+      let json: RollMessage = JSON.parse(msg)
+
+      setNotificacoes(prev => [...(prev ?? []), `${json.Personagem} rolou ${json.Modalidade}:\n${json.Output}`])
+
+
+      console.log(json)
+    });
+
+    return () => {
+      if (dadosHubContext.state === "Connected") {
+        dadosHubContext.stop();
+        console.log("SignalR desconectado ao fechar a página.");
+      }
+      dadosHubContext.off("messageReceived", message => console.log(message));
+    };
+
+  }, [])
+
   if (loading) {
     return <p>Carregando...</p>;
   }
@@ -52,12 +109,16 @@ function HomeLayout() {
 
   return (
     <TokenContext value={keycloak.token}>
-      <PersonagemContext.Provider value={undefined}>
-        <article className="min-h-screen bg-base-200">
-          <Navbar />
-          <Outlet />
-        </article>
-      </PersonagemContext.Provider>
+      <NotificacoesContext.Provider value={{ notificacoes, setNotificacoes }}>
+
+        <PersonagemContext.Provider value={undefined}>
+          <article className="min-h-screen bg-base-200">
+            <Navbar />
+            <Outlet />
+            <NotificationExplorer />
+          </article>
+        </PersonagemContext.Provider>
+      </NotificacoesContext.Provider>
     </TokenContext>
   );
 }
