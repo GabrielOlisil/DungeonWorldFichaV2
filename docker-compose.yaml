@@ -14,7 +14,7 @@ services:
     build: ./frontend_vite
     restart: always
     ports: 
-      - "3000:3000"
+      - "3000:80"
 
   dice_service:
     build: ./dice_service

@@ -17,7 +17,7 @@ public class DadosEndpoints
 {
     public static Task<IResult> RollDamage(ApplicationDbContext db, IPersonagemDictionary personagemDictionary,
         PostDiceDto postDiceDto,
-        ILogger<DadosEndpoints> logger)
+        ILogger<DadosEndpoints> logger, IConfiguration configuration)
     {
         return ErrorHandler.HandleErrorWithNoLogAsync(async () =>
         {
@@ -67,7 +67,7 @@ public class DadosEndpoints
 
             logger.LogInformation("Rolagem de {@string} {@string}", parsed, rolagem);
 
-            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "user", Password = "password" };
+            var factory = new ConnectionFactory() { HostName = configuration["RabbitMq:Host"]!, UserName = "user", Password = "password" };
 
             await using var connection = await factory.CreateConnectionAsync();
             await using var channel = await connection.CreateChannelAsync();

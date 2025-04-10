@@ -27,7 +27,7 @@ export default function Navbar() {
                             <li><Link to="/">Homepage</Link></li>
                             <li><Link to="/personagens">Personagens</Link></li>
                             <li><Link to="/personagens/novo">Criar</Link></li>
-                            <li><span onClick={() => keycloak.logout({ redirectUri: "http://localhost:5173/" })}>Sair</span></li>
+                            <li><span onClick={() => keycloak.logout({ redirectUri: `${import.meta.env.VITE_REDIRECT_URL}` })}>Sair</span></li>
                         </ul>
                     </div>
                 </div>

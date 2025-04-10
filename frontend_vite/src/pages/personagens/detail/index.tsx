@@ -16,7 +16,7 @@ export default function DetailPersonagem() {
 
     const fetchPersonagem = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/personagens/${id}`,
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/personagens/${id}`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,

@@ -11,7 +11,7 @@ export default function Home() {
     const token = useContext(TokenContext)
 
     const fetchPersonagem = async () => {
-        const res = await fetch("http://localhost:8000/api/personagens", {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/personagens`, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json"

@@ -35,7 +35,7 @@ export default function RollMovimentoTooltip({ props }: { props: RollMovimentoTo
 
     const RollDice = () => {
 
-        fetch("http://localhost:8000/api/dados", {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/dados`, {
             headers: {
                 "Content-Type": "application/json"
             },

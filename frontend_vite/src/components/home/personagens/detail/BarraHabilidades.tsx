@@ -28,7 +28,7 @@ const BarraHabilidades = ({ props }: { props: Personagem | undefined }) => {
         try {
             const body = JSON.stringify(person)
 
-            const response = await fetch(`http://localhost:8000/api/personagens/${person?.personagemId}`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/personagens/${person?.personagemId}`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${token}`,

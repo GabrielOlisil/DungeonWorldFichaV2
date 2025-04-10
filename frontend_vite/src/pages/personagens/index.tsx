@@ -9,7 +9,7 @@ export default function PersonagensList() {
     const token = useContext(TokenContext)
 
     const fetchData = async () => {
-        const data = await fetch('http://localhost:8000/api/personagens', {
+        const data = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/personagens`, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json"

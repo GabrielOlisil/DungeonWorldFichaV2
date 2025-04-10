@@ -21,7 +21,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost3000", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:3000")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials();
@@ -86,7 +86,7 @@ app.ApplyPendingMigrations();
 
 app.MapGroup("/api").RegisterEndpoints();
 
-app.Urls.Add("http://+:8000");
+app.Urls.Add("http://+:8080");
 app.MapHub<PersonagemHub>("/personagensHub").RequireCors("AllowLocalhost3000");
 app.MapHub<DadosHub>("/dadosHub").RequireCors("AllowLocalhost3000");
 

@@ -33,7 +33,7 @@ export default function NovoPersonagem() {
         const body = JSON.stringify(personagem);
 
         try {
-            const response = await fetch("http://localhost:8000/api/personagens", {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/personagens`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`,

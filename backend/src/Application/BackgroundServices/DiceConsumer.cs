@@ -9,9 +9,9 @@ using RabbitMQ.Client.Events;
 
 namespace backend.Application.BackgroundServices;
 
-public class DiceConsumer(ILogger<DiceConsumer> logger, IHubContext<DadosHub> dadosContext) : BackgroundService
+public class DiceConsumer(ILogger<DiceConsumer> logger, IHubContext<DadosHub> dadosContext, IConfiguration configuration) : BackgroundService
 {
-    private readonly ConnectionFactory _factory = new() { HostName = "localhost", UserName = "user", Password = "password" };
+    private readonly ConnectionFactory _factory = new() { HostName = configuration["RabbitMq:Host"]!, UserName = "user", Password = "password" };
 
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
